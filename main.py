@@ -6,6 +6,7 @@ import requests
 import json
 from dotenv import load_dotenv
 from datetime import datetime
+import random
 
 load_dotenv()
 
@@ -17,6 +18,15 @@ langfuse = Langfuse(
 
 allowed_users = [128727299, 66475383]
 model="deepseek/deepseek-chat"
+frasi_caricamento = [
+    "Aggiungendo un tocco di eleganza... 30% completato",
+    "Ottimizzando l'eleganza... Cercando di evitare una crisi esistenziale",
+    "Sto raffinando il testo... Evitando che diventi un’interazione sociale imbarazzante",
+    "Caricamento della classe 'Babysitter di lusso'... Quasi pronto",
+    "Migliorando la grammatica... Nessun bimbo sarà danneggiato nel processo",
+    "Sto abbellendo il messaggio... Attenzione: potrebbe diventare irresistibilmente perfetto"
+]
+
 
 async def transformer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_id = update._effective_message.from_user.id
@@ -24,6 +34,7 @@ async def transformer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     message_text = update.message.text
     trace.update(name=message_text[:150])
     if user_id in allowed_users:
+        await update.message.reply_text(f'{random.choice(frasi_caricamento)}')
         trace.update(metadata={"authorized": True})
         prompt = langfuse.get_prompt("transformer_2")
         messages = prompt.compile(raw_message=message_text, time=datetime.now())
