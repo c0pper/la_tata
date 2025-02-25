@@ -19,12 +19,12 @@ langfuse = Langfuse(
 allowed_users = [128727299, 66475383]
 model="deepseek/deepseek-chat"
 frasi_caricamento = [
-    "Aggiungendo un tocco di eleganza... 30% completato",
-    "Ottimizzando l'eleganza... Cercando di evitare una crisi esistenziale",
-    "Sto raffinando il testo... Evitando che diventi un’interazione sociale imbarazzante",
-    "Caricamento della classe 'Babysitter di lusso'... Quasi pronto",
-    "Migliorando la grammatica... Nessun bimbo sarà danneggiato nel processo",
-    "Sto abbellendo il messaggio... Attenzione: potrebbe diventare irresistibilmente perfetto"
+    "Aggiungendo un tocco di eleganza... 30% completato...",
+    "Ottimizzando l'eleganza... Cercando di evitare una crisi esistenziale...",
+    "Sto raffinando il testo... Evitando che diventi un’interazione sociale imbarazzante...",
+    "Caricamento della classe 'Babysitter di lusso'... Quasi pronto...",
+    "Migliorando la grammatica... Nessun bimbo sarà danneggiato nel processo...",
+    "Sto abbellendo il messaggio... Attenzione: potrebbe diventare irresistibilmente perfetto..."
 ]
 
 
