@@ -1,0 +1,2 @@
+Build commands!
+docker build --network=host -t latata-bot . && docker stop latata-bot && docker rm latata-bot && docker run -d --network=host --restart unless-stopped --name latata-bot --env-file .env latata-bot
