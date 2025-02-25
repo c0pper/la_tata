@@ -55,7 +55,7 @@ async def transformer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         langfuse.generation(
             trace_id=trace.id,
             prompt=prompt,
-            input=message_text,
+            input=messages,
             output=text_res,
             model=model
         )
