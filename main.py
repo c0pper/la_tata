@@ -28,6 +28,32 @@ frasi_caricamento = [
 ]
 
 
+def call_llm(message_text, trace):
+    prompt = langfuse.get_prompt("transformer_2")
+    messages = prompt.compile(raw_message=message_text, time=datetime.now())
+    response = requests.post(
+        url="https://openrouter.ai/api/v1/chat/completions",
+        headers={
+            "Authorization": f"Bearer {os.environ['OPENROUTER']}",
+        },
+        data=json.dumps({
+            "model": model, # Optional
+            "messages": messages
+        })
+    )
+    json_res = response.json()
+    text_res = json_res["choices"][0]["message"]["content"]
+
+    langfuse.generation(
+        trace_id=trace.id,
+        prompt=prompt,
+        input=messages,
+        output=text_res,
+        model=model
+    )
+    return text_res
+
+
 async def transformer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_id = update._effective_message.from_user.id
     trace = langfuse.trace()
@@ -36,29 +62,10 @@ async def transformer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     if user_id in allowed_users:
         await update.message.reply_text(f'{random.choice(frasi_caricamento)}')
         trace.update(metadata={"authorized": True})
-        prompt = langfuse.get_prompt("transformer_2")
-        messages = prompt.compile(raw_message=message_text, time=datetime.now())
-        response = requests.post(
-            url="https://openrouter.ai/api/v1/chat/completions",
-            headers={
-                "Authorization": f"Bearer {os.environ['OPENROUTER']}",
-            },
-            data=json.dumps({
-                "model": model, # Optional
-                "messages": messages
-            })
-        )
-        json_res = response.json()
-        text_res = json_res["choices"][0]["message"]["content"]
-        trace.update(input=message_text, output=text_res)
 
-        langfuse.generation(
-            trace_id=trace.id,
-            prompt=prompt,
-            input=messages,
-            output=text_res,
-            model=model
-        )
+        text_res = call_llm(message_text, trace)
+
+        trace.update(input=message_text, output=text_res)
 
         await update.message.reply_text(f'{text_res}')
     else:
